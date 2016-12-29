@@ -27,3 +27,14 @@
 *.exe
 *.out
 *.app
+*.suo
+*.ipch
+*.ilk
+*.pdb
+*.log
+*.db
+*.aps
+Debug/
+Release/
+ipch/
+.vs/
