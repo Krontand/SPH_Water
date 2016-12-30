@@ -1,12 +1,16 @@
 #pragma once
 
 #include "math/vec3.h"
-#include <math.h>
+
+#define _USE_MATH_DEFINES
+#include <cmath>
 
 class Camera
 {
 public:
 	Camera(double x, double y, double z);
+
+	void rotate(float ax, float ay);
 
 	vec3 eye;     // Позиция камеры
 

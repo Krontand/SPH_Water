@@ -17,7 +17,7 @@ void main(void)
 {
 	int width = 800;
 	int height = 600;
-	float R = 0.08;
+	float R = 0.012;
 	gl_Position = modelViewProjectionMatrix * vec4(position, 1.0);
 	fragmentColor = color;
 
