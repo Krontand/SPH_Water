@@ -8,11 +8,11 @@
 
 #include "Scene.h"
 
-#define WIDTH 800
-#define HEIGHT 600
+#define WIDTH 1360
+#define HEIGHT 768
 
 // положение курсора и его смещение с последнего кадра
-static int16_t cursorPos[2] = {0, 0}, rotateDelta[2] = {0, 0}, oldPos[2] = {-1, -1};
+static int16_t cursorPos[2] = { 0, 0 }, rotateDelta[2] = { 0, 0 }, oldPos[2] = { -1, -1 }, oldwheel = 0, wheel = 0;
 
 static Scene *scene;
 
@@ -51,8 +51,11 @@ void GLWindowUpdate(const GLWindow *window, double deltaTime)
 	ASSERT(deltaTime >= 0.0); // проверка на возможность бага
 
 	scene->rotate_cam(rotateDelta[0], rotateDelta[1]);
+	if (wheel != 0)
+		scene->change_cam_dist(wheel);
 	rotateDelta[0] = 0;
 	rotateDelta[1] = 0;
+	wheel = 0;
 }
 
 // функция обработки ввода с клавиатуры и мыши
@@ -84,6 +87,11 @@ void GLWindowInput(const GLWindow *window)
 		oldPos[0] = cursorPos[0];
 		oldPos[1] = cursorPos[1];
 	}
+	int16_t w;
+	InputGetWheelScrollTimes(w);
+	wheel += w - oldwheel;
+	oldwheel = w;
+	
 }
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)

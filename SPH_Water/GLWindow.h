@@ -27,6 +27,7 @@ struct Input
 	uint8_t keyState[256];
 	uint8_t buttonState[3];
 	int16_t cursorPos[2];
+	int16_t wheelCount;
 };
 
 // создание окна с поддержкой OpenGL
@@ -60,5 +61,7 @@ bool InputIsButtonClick(uint8_t button);
 void InputGetCursorPos(int16_t *x, int16_t *y);
 // задать положение курсора
 void InputSetCursorPos(int16_t x, int16_t y);
+// получить количество поворотов колесика мыши
+void InputGetWheelScrollTimes(int16_t &wheel);
 
 #endif /* GLWINDOW_H */

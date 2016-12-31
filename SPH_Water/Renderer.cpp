@@ -199,7 +199,7 @@ void Renderer::setviewmatr(Camera *cam)
 
 void Renderer::setprojmatr(Camera *cam)
 {
-	projMatr = GLPerspective(90, 1.33, 0.1, 200);
+	projMatr = GLPerspective(90, 1360.0/768.0, 0.1, 200);
 }
 
 

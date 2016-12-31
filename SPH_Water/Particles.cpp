@@ -12,6 +12,8 @@ Particles::Particles()
 	zcount = 50;
 	scale = 1.3;
 
+	ParticleData buf;
+
 	for (int x = 0; x < xcount; x++)
 	{
 		for (int y = 0; y < ycount; y++)
@@ -25,6 +27,11 @@ Particles::Particles()
 				triangleMesh[6 * i + 4] = 0.4;
 				triangleMesh[6 * i + 5] = 1.0;
 				i++;
+				buf.position.x = triangleMesh[6 * i + 0];
+				buf.position.y = triangleMesh[6 * i + 1];
+				buf.position.z = triangleMesh[6 * i + 2];
+				buf.velocity.set(0, 0, 0);
+				this->data.push_back(buf);
 			}
 		}
 	}

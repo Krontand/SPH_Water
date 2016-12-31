@@ -11,6 +11,7 @@ public:
 	Camera(double x, double y, double z);
 
 	void rotate(float ax, float ay);
+	void scale_dist(float scale);
 
 	vec3 eye;     // Позиция камеры
 
@@ -22,5 +23,8 @@ public:
 	double anglex;  // Поворот в горизонтальной плоскости
 	double angley;  // Поворот в вертикальной плоскости
 	double dist;    // Расстояние от центра координат мировой СК
+
+private:
+	void set_pos();
 };
 

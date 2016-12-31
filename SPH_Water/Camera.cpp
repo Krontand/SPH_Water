@@ -19,6 +19,13 @@ Camera::Camera(double x, double y, double z)
 	eye_s = eye;
 }
 
+void Camera::set_pos()
+{
+	this->eye.z = this->dist * sin(this->angley) * cos(this->anglex);
+	this->eye.x = this->dist * sin(this->angley) * sin(this->anglex);
+	this->eye.y = this->dist * cos(this->angley);
+}
+
 void Camera::rotate(float ax, float ay)
 {
 //	ax /= 1000;
@@ -30,7 +37,12 @@ void Camera::rotate(float ax, float ay)
 	if (this->angley > 3.14159)
 		this->angley = 3.14159;
 	this->anglex += ax/80;
-	this->eye.z = this->dist * sin(this->angley) * cos(this->anglex);
-	this->eye.x = this->dist * sin(this->angley) * sin(this->anglex);
-	this->eye.y = this->dist * cos(this->angley);
+	this->set_pos();
+
+}
+
+void Camera::scale_dist(float scale)
+{
+	this->dist *= scale;
+	this->set_pos();
 }

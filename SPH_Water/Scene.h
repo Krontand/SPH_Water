@@ -12,6 +12,7 @@ public:
 
 	void render();
 	void rotate_cam(float ax, float ay);
+	void change_cam_dist(int count);
 	void update_particles();
 	void clear();
 

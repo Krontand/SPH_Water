@@ -19,6 +19,7 @@ static LRESULT CALLBACK GLWindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM 
 // хранение стейта окна и ввода
 static GLWindow g_window;
 static Input    g_input;
+static int wheelDelta = 0;
 
 static double        g_timerFrequency = 0.0;
 static LARGE_INTEGER g_qpc;
@@ -374,6 +375,13 @@ LRESULT CALLBACK GLWindowProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
 	{
+		case WM_MOUSEWHEEL:
+			wheelDelta += GET_WHEEL_DELTA_WPARAM(wParam);
+			for (; wheelDelta > WHEEL_DELTA; wheelDelta -= WHEEL_DELTA)
+				g_input.wheelCount++;
+			for (; wheelDelta < 0; wheelDelta += WHEEL_DELTA)
+				g_input.wheelCount--;
+			return FALSE;
 		case WM_LBUTTONDOWN:
 		case WM_LBUTTONUP:
 		case WM_RBUTTONDOWN:
@@ -500,6 +508,11 @@ bool InputIsButtonClick(uint8_t button)
 	bool pressed = (g_input.buttonState[button] == INPUT_PRESSED);
 	g_input.buttonState[button] = INPUT_DOWN;
 	return pressed;
+}
+
+void InputGetWheelScrollTimes(int16_t &wheel)
+{
+	wheel = g_input.wheelCount;
 }
 
 void InputGetCursorPos(int16_t *x, int16_t *y)

@@ -24,6 +24,11 @@ void Scene::rotate_cam(float ax, float ay)
 	this->cam->rotate(ax, ay);
 }
 
+void Scene::change_cam_dist(int count)
+{
+	this->cam->scale_dist(pow(0.99, count));
+}
+
 void Scene::update_particles()
 {
 	this->p->update_particles();
