@@ -2,6 +2,7 @@
 
 #include <vector>
 #include "math/vec3.h"
+#include <omp.h>
 
 typedef struct
 {
@@ -15,7 +16,7 @@ public:
 	Particles();
 	~Particles();
 
-	void update_particles();
+	void update_particles(float dt);
 
 	// количество вершин в нашей геометрии, у нас простой треугольник
 	int MESH_VERTEX_COUNT = 125000;
@@ -30,6 +31,6 @@ private:
 	int zcount;
 	float scale;
 
-	const vec3 g = vec3(0.0, 9.81, 0.0);
+	const vec3 g = vec3(0.0, -9.81, 0.0);
 };
 

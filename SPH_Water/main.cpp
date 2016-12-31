@@ -10,7 +10,9 @@
 
 #define WIDTH 1360
 #define HEIGHT 768
-
+extern "C" {
+	_declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
+}
 // положение курсора и его смещение с последнего кадра
 static int16_t cursorPos[2] = { 0, 0 }, rotateDelta[2] = { 0, 0 }, oldPos[2] = { -1, -1 }, oldwheel = 0, wheel = 0;
 
@@ -56,6 +58,8 @@ void GLWindowUpdate(const GLWindow *window, double deltaTime)
 	rotateDelta[0] = 0;
 	rotateDelta[1] = 0;
 	wheel = 0;
+
+	scene->update_particles(deltaTime);
 }
 
 // функция обработки ввода с клавиатуры и мыши

@@ -29,9 +29,9 @@ void Scene::change_cam_dist(int count)
 	this->cam->scale_dist(pow(0.99, count));
 }
 
-void Scene::update_particles()
+void Scene::update_particles(float dt)
 {
-	this->p->update_particles();
+	this->p->update_particles(dt);
 }
 
 void Scene::clear()

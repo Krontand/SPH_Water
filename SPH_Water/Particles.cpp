@@ -1,4 +1,4 @@
-#include "stdafx.h"
+﻿#include "stdafx.h"
 #include "Particles.h"
 
 
@@ -13,6 +13,7 @@ Particles::Particles()
 	scale = 1.3;
 
 	ParticleData buf;
+	buf.velocity.set(0, 0, 0);
 
 	for (int x = 0; x < xcount; x++)
 	{
@@ -26,11 +27,10 @@ Particles::Particles()
 				triangleMesh[6 * i + 3] = 0.0;
 				triangleMesh[6 * i + 4] = 0.4;
 				triangleMesh[6 * i + 5] = 1.0;
-				i++;
 				buf.position.x = triangleMesh[6 * i + 0];
 				buf.position.y = triangleMesh[6 * i + 1];
 				buf.position.z = triangleMesh[6 * i + 2];
-				buf.velocity.set(0, 0, 0);
+				i++;
 				this->data.push_back(buf);
 			}
 		}
@@ -43,6 +43,53 @@ Particles::~Particles()
 	delete triangleMesh;
 }
 
-void Particles::update_particles()
+void Particles::update_particles(float dt)
 {
+	dt /= 10;
+	vec3 oldpos;
+
+	for (auto particle = this->data.begin(); particle != this->data.end(); particle++)
+	{
+		particle->velocity = particle->velocity + this->g * dt;
+		oldpos = particle->position;
+		particle->position = particle->position + particle->velocity * dt;
+		particle->velocity = (particle->position - oldpos) / dt;
+	}
+	for (int i = 0; i < MESH_VERTEX_COUNT; i++)
+	{
+		triangleMesh[6 * i + 0] = data[i].position.x;
+		triangleMesh[6 * i + 1] = data[i].position.y;
+		triangleMesh[6 * i + 2] = data[i].position.z;
+	}
 }
+
+/*
+
+Algorithm 1: Simulation step.
+1. foreach particle i
+2. // apply gravity
+3. vi ← vi + ∆tg
+4. // modify velocities with pairwise viscosity impulses
+5. applyViscosity // (Section 5.3)
+6. foreach particle i
+7. // save previous position
+8. x
+prev
+i ← xi
+9. // advance to predicted position
+10. xi ← xi + ∆tvi
+11. // add and remove springs, change rest lengths
+12. adjustSprings // (Section 5.2)
+13. // modify positions according to springs,
+14. // double density relaxation, and collisions
+15. applySpringDisplacements // (Section 5.1)
+16. doubleDensityRelaxation // (Section 4)
+17. resolveCollisions // (Section 6)
+18. foreach particle i
+19. // use previous position to compute next velocity
+20. vi ←(xi − xprevi) / ∆t
+
+Particle-based Viscoelastic Fluid Simulation
+http://www.ligum.umontreal.ca/Clavet-2005-PVFS/pvfs.pdf
+
+*/
