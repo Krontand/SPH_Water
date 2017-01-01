@@ -10,9 +10,11 @@
 
 #define WIDTH 1360
 #define HEIGHT 768
+
 extern "C" {
 	_declspec(dllexport) DWORD NvOptimusEnablement = 0x00000001;
 }
+
 // положение курсора и его смещение с последнего кадра
 static int16_t cursorPos[2] = { 0, 0 }, rotateDelta[2] = { 0, 0 }, oldPos[2] = { -1, -1 }, oldwheel = 0, wheel = 0;
 
@@ -22,8 +24,6 @@ static Scene *scene;
 bool GLWindowInit(const GLWindow *window)
 {
 	ASSERT(window);
-	// спрячем курсор
-	ShowCursor(false);
 
 	scene = new Scene(WIDTH, HEIGHT);
 	return true;
@@ -35,7 +35,6 @@ void GLWindowClear(const GLWindow *window)
 	ASSERT(window);
 
 	scene->clear();
-	ShowCursor(true);
 }
 
 // функция рендера
@@ -77,17 +76,24 @@ void GLWindowInput(const GLWindow *window)
 	// осуществляется по нажатию комбинации Alt+Enter
 	if (InputIsKeyDown(VK_MENU) && InputIsKeyPressed(VK_RETURN))
 		GLWindowSetSize(window->width, window->height, !window->fullScreen);
-
 	InputGetCursorPos(cursorPos, cursorPos + 1);
-	if (oldPos[0] == -1)
+	if (InputIsButtonDown(0))
 	{
-		oldPos[0] = cursorPos[0];
-		oldPos[1] = cursorPos[1];
+		if (oldPos[0] == -1)
+		{
+			oldPos[0] = cursorPos[0];
+			oldPos[1] = cursorPos[1];
+		}
+		else
+		{
+			rotateDelta[0] += cursorPos[0] - oldPos[0];
+			rotateDelta[1] += cursorPos[1] - oldPos[1];
+			oldPos[0] = cursorPos[0];
+			oldPos[1] = cursorPos[1];
+		}
 	}
 	else
 	{
-		rotateDelta[0] += cursorPos[0] - oldPos[0];
-		rotateDelta[1] += cursorPos[1] - oldPos[1];
 		oldPos[0] = cursorPos[0];
 		oldPos[1] = cursorPos[1];
 	}

@@ -35,6 +35,8 @@ Particles::Particles()
 			}
 		}
 	}
+
+	this->hash = new ParticleHashTable(125003, 0.02);
 }
 
 
@@ -45,15 +47,21 @@ Particles::~Particles()
 
 void Particles::update_particles(float dt)
 {
-	dt /= 10;
+	dt /= 5;
 	vec3 oldpos;
-
+	this->hash->generate_hashtable(this->data);
 	for (auto particle = this->data.begin(); particle != this->data.end(); particle++)
 	{
 		particle->velocity = particle->velocity + this->g * dt;
 		oldpos = particle->position;
 		particle->position = particle->position + particle->velocity * dt;
+
+		//this->doubleDensityRelaxation();
+
 		particle->velocity = (particle->position - oldpos) / dt;
+
+		if (particle->position.y < -1.2)
+			particle->velocity.y = fabs(particle->velocity.y);
 	}
 	for (int i = 0; i < MESH_VERTEX_COUNT; i++)
 	{
@@ -63,8 +71,19 @@ void Particles::update_particles(float dt)
 	}
 }
 
-/*
+void Particles::doubleDensityRelaxation()
+{
+	float ro;
+	float ro_near;
+	for (auto particle = this->data.begin(); particle != this->data.end(); particle++)
+	{
+		ro = 0;
+		ro_near = 0;
+	}
+}
 
+
+/*
 Algorithm 1: Simulation step.
 1. foreach particle i
 2. // apply gravity
@@ -73,9 +92,7 @@ Algorithm 1: Simulation step.
 5. applyViscosity // (Section 5.3)
 6. foreach particle i
 7. // save previous position
-8. x
-prev
-i ← xi
+8. xprevi ← xi
 9. // advance to predicted position
 10. xi ← xi + ∆tvi
 11. // add and remove springs, change rest lengths

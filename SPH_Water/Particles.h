@@ -1,14 +1,6 @@
 #pragma once
 
-#include <vector>
-#include "math/vec3.h"
-#include <omp.h>
-
-typedef struct
-{
-	vec3 velocity;
-	vec3 position;
-} ParticleData;
+#include "ParticleHashTable.h"
 
 class Particles
 {
@@ -18,18 +10,22 @@ public:
 
 	void update_particles(float dt);
 
-	// количество вершин в нашей геометрии, у нас простой треугольник
+	// количество частиц
 	int MESH_VERTEX_COUNT = 125000;
 
-	// подготовим данные для вывода треугольника, всего 3 вершины
+	// массив координат и цветов для Opengl
 	float *triangleMesh;
-	std::vector<ParticleData> data;
+	ParticleList data;
 
 private:
+	ParticleHashTable *hash;
+
 	int xcount;
 	int ycount;
 	int zcount;
 	float scale;
+
+	void doubleDensityRelaxation();
 
 	const vec3 g = vec3(0.0, -9.81, 0.0);
 };
