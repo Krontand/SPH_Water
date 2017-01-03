@@ -3,6 +3,10 @@
 #include "math/mathgl.h"
 #include "Camera.h"
 #include "OpenGL.h"
+
+#include "cuda.h"
+#include "cuda_gl_interop.h"
+
 #include "Particles.h"
 
 class Renderer
@@ -58,5 +62,7 @@ private:
 
 	// переменные для хранения идентификаторов VAO и VBO
 	GLuint meshVAO = 0, meshVBO = 0;
+
+	cudaGraphicsResource *resource;
 
 };

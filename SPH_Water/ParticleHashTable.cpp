@@ -7,13 +7,7 @@ ParticleHashTable::ParticleHashTable(size_t size, float step)
 	this->step = step;
 	this->step1 = 1 / step;
 	this->size = size;
-	this->table = new Entry[size];
-
-	for (int i = 0; i < size; i++)
-	{
-		table[i] = (int *)malloc((depth + 1) * sizeof(int));
-		table[i][0] = 0;
-	}
+	this->table = new int[size * d];
 }
 
 ParticleHashTable::~ParticleHashTable()
@@ -23,12 +17,12 @@ ParticleHashTable::~ParticleHashTable()
 
 int ParticleHashTable::insert(int index, vec3 position)
 {
-	int ind = hash_func(position.x * step1, position.y * step1, position.z * step1);
-	int &n = this->table[ind][0];
-	if (n < depth)
+	int ind = d * hash_func(position.x * step1, position.y * step1, position.z * step1);
+
+	if (table[ind] < d)
 	{
-		n++;
-		this->table[ind][n] = index;
+		table[ind]++;
+		table[ind + table[ind]] = index;
 	}
 	return ind;
 }
@@ -45,10 +39,10 @@ int ParticleHashTable::get_neighbours(int *neighbours, vec3 position, float h)
 		for (int j = y - 1; j < y + 2; j++)
 			for (int k = z - 1; k < z + 2; k++)
 			{
-				ind = hash_func(i, j, k);
-				int n = table[ind][0];
-				for (int l = 1; l <= n; l++)
-					neighbours[num++] = table[ind][l];
+				ind = d * hash_func(i, j, k);
+				int n = table[ind];
+				//for (int l = 1; l <= n; l++)
+					neighbours[num++] = table[ind + 1];
 			}
 	return num;
 }
@@ -64,10 +58,15 @@ int ParticleHashTable::generate_hashtable(ParticleList &data)
 	return 0;
 }
 
+const int ParticleHashTable::depth()
+{
+	return this->d;
+}
+
 void ParticleHashTable::clear_table()
 {
 	for (int i = 0; i < this->size; i++)
-		this->table[i][0] = 0; 
+		this->table[d * i] = 0; 
 }
 
 int ParticleHashTable::hash_func(int x, int y, int z)

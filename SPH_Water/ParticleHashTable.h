@@ -24,6 +24,7 @@ public:
 	int insert(int index, vec3 position);
 	int get_neighbours(int *neighbours, vec3 position, float h);
 	int generate_hashtable(ParticleList &data);
+	const int depth();
 
 private:
 	void clear_table();
@@ -32,8 +33,8 @@ private:
 	float step;
 	float step1;
 	size_t size;
-	Entry *table;
-	const int depth = 4;
+	int *table;
+	const int d = 4;
 
 	// Простые числа для хеш-функции
 	const int a = 73856093;

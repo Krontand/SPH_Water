@@ -39,3 +39,6 @@ Release/
 ipch/
 .vs/
 SPH_Water.VC.VC.opendb
+*.vsp
+*.vspx
+*.psess

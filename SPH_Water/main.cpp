@@ -1,11 +1,10 @@
 #include "stdafx.h"
 #define WIN32_LEAN_AND_MEAN 1
+
 #include <windows.h>
-
-#include "common.h"
 #include "OpenGL.h"
+#include "common.h"
 #include "GLWindow.h"
-
 #include "Scene.h"
 
 #define WIDTH 1360
@@ -104,12 +103,14 @@ void GLWindowInput(const GLWindow *window)
 	
 }
 
+
+
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
 	int result;
 
 	LoggerCreate("SPH_Water_log.log");
-
+//	CUDA_init();
 	if (!GLWindowCreate("SPH Water (lol, water)", WIDTH, HEIGHT, false))
 		return 1;
 

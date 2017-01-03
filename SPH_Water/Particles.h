@@ -11,7 +11,7 @@ public:
 	void update_particles(float dt);
 
 	// количество частиц
-	int MESH_VERTEX_COUNT = 125000;
+	int MESH_VERTEX_COUNT = 23328;
 
 	// массив координат и цветов для Opengl
 	float *triangleMesh;
@@ -24,6 +24,7 @@ private:
 	int ycount;
 	int zcount;
 	float scale;
+	float h;
 
 	void doubleDensityRelaxation();
 

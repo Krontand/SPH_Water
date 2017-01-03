@@ -7,10 +7,10 @@ Particles::Particles()
 	triangleMesh = new float[MESH_VERTEX_COUNT * 6];
 	int i = 0;
 
-	xcount = 50;
-	ycount = 50;
-	zcount = 50;
-	scale = 1.3;
+	xcount = 36;
+	ycount = 18;
+	zcount = 36;
+	scale = 0.9;
 
 	ParticleData buf;
 	buf.velocity.set(0, 0, 0);
@@ -36,7 +36,7 @@ Particles::Particles()
 		}
 	}
 
-	this->hash = new ParticleHashTable(125003, 0.02);
+	this->hash = new ParticleHashTable(23333, 0.03);
 }
 
 
@@ -49,14 +49,14 @@ void Particles::update_particles(float dt)
 {
 	dt /= 5;
 	vec3 oldpos;
-	this->hash->generate_hashtable(this->data);
+	//this->hash->generate_hashtable(this->data);
 	for (auto particle = this->data.begin(); particle != this->data.end(); particle++)
 	{
 		particle->velocity = particle->velocity + this->g * dt;
 		oldpos = particle->position;
 		particle->position = particle->position + particle->velocity * dt;
 
-		//this->doubleDensityRelaxation();
+	//	this->doubleDensityRelaxation();
 
 		particle->velocity = (particle->position - oldpos) / dt;
 
@@ -73,12 +73,15 @@ void Particles::update_particles(float dt)
 
 void Particles::doubleDensityRelaxation()
 {
+	int *nbours = new int[hash->depth() * 50];
+	int num;
 	float ro;
 	float ro_near;
 	for (auto particle = this->data.begin(); particle != this->data.end(); particle++)
 	{
 		ro = 0;
 		ro_near = 0;
+		num = hash->get_neighbours(nbours, particle->position, this->h);
 	}
 }
 
