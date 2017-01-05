@@ -1,6 +1,17 @@
 #pragma once
 
-#include "ParticleHashTable.h"
+#include <vector>
+#include "cuda_runtime.h"
+#include "math/mathgl.h"
+#include "Particle_kernel.cuh"
+
+typedef struct
+{
+	vec3 velocity;
+	vec3 position;
+} ParticleData;
+
+typedef std::vector<ParticleData> ParticleList;
 
 class Particles
 {
@@ -8,18 +19,16 @@ public:
 	Particles();
 	~Particles();
 
-	void update_particles(float dt);
+	void update_particles(float *particles, float dt);
 
 	// количество частиц
-	int MESH_VERTEX_COUNT = 23328;
+	const static int MESH_VERTEX_COUNT = 186624;
 
 	// массив координат и цветов для Opengl
 	float *triangleMesh;
-	ParticleList data;
+	ParticleData data[MESH_VERTEX_COUNT];
 
 private:
-	ParticleHashTable *hash;
-
 	int xcount;
 	int ycount;
 	int zcount;

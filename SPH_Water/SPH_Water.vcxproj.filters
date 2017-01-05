@@ -19,6 +19,12 @@
     <Filter Include="Resource Files\shaders">
       <UniqueIdentifier>{4e297e0b-a719-40d9-a4f0-4a1692cf0eba}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\cuda">
+      <UniqueIdentifier>{4025eb63-a32c-4db6-afdf-5f12d5a7ef0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\cuda">
+      <UniqueIdentifier>{3239ba3b-b347-492f-83e6-e37aa880cec6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -89,6 +95,12 @@
     <ClInclude Include="ParticleHashTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CUDA_core.cuh">
+      <Filter>Header Files\cuda</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle_kernel.cuh">
+      <Filter>Header Files\cuda</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SPH_Water.rc">
@@ -139,6 +151,11 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CudaCompile Include="CUDA_log.cu" />
+    <CudaCompile Include="CUDA_core.cu">
+      <Filter>Source Files\cuda</Filter>
+    </CudaCompile>
+    <CudaCompile Include="Particle_kernel.cu">
+      <Filter>Source Files\cuda</Filter>
+    </CudaCompile>
   </ItemGroup>
 </Project>

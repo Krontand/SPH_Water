@@ -7,10 +7,10 @@ Particles::Particles()
 	triangleMesh = new float[MESH_VERTEX_COUNT * 6];
 	int i = 0;
 
-	xcount = 36;
-	ycount = 18;
-	zcount = 36;
-	scale = 0.9;
+	xcount = 72;
+	ycount = 36;
+	zcount = 72;
+	scale = 1.6;
 
 	ParticleData buf;
 	buf.velocity.set(0, 0, 0);
@@ -30,13 +30,11 @@ Particles::Particles()
 				buf.position.x = triangleMesh[6 * i + 0];
 				buf.position.y = triangleMesh[6 * i + 1];
 				buf.position.z = triangleMesh[6 * i + 2];
+				data[i] = buf;
 				i++;
-				this->data.push_back(buf);
 			}
 		}
 	}
-
-	this->hash = new ParticleHashTable(23333, 0.03);
 }
 
 
@@ -45,35 +43,18 @@ Particles::~Particles()
 	delete triangleMesh;
 }
 
-void Particles::update_particles(float dt)
+void Particles::update_particles(float *particles, float dt)
 {
 	dt /= 5;
-	vec3 oldpos;
-	//this->hash->generate_hashtable(this->data);
-	for (auto particle = this->data.begin(); particle != this->data.end(); particle++)
-	{
-		particle->velocity = particle->velocity + this->g * dt;
-		oldpos = particle->position;
-		particle->position = particle->position + particle->velocity * dt;
+	const int threads = 512;
+	int blocks = (MESH_VERTEX_COUNT + 511) / 512;
 
-	//	this->doubleDensityRelaxation();
-
-		particle->velocity = (particle->position - oldpos) / dt;
-
-		if (particle->position.y < -1.2)
-			particle->velocity.y = fabs(particle->velocity.y);
-	}
-	for (int i = 0; i < MESH_VERTEX_COUNT; i++)
-	{
-		triangleMesh[6 * i + 0] = data[i].position.x;
-		triangleMesh[6 * i + 1] = data[i].position.y;
-		triangleMesh[6 * i + 2] = data[i].position.z;
-	}
+	calculateParticles(particles, dt, MESH_VERTEX_COUNT, blocks, threads);
 }
 
 void Particles::doubleDensityRelaxation()
 {
-	int *nbours = new int[hash->depth() * 50];
+/*	int *nbours = new int[hash->depth() * 50];
 	int num;
 	float ro;
 	float ro_near;
@@ -82,7 +63,7 @@ void Particles::doubleDensityRelaxation()
 		ro = 0;
 		ro_near = 0;
 		num = hash->get_neighbours(nbours, particle->position, this->h);
-	}
+	}*/
 }
 
 

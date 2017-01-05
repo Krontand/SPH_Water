@@ -4,10 +4,12 @@
 #include "Camera.h"
 #include "OpenGL.h"
 
-#include "cuda.h"
-#include "cuda_gl_interop.h"
+#include "CUDA_core.cuh"
 
 #include "Particles.h"
+
+#define BUF_TARGET GL_PIXEL_UNPACK_BUFFER_ARB
+#define ARR_TARGET GL_ARRAY_BUFFER
 
 class Renderer
 {
@@ -36,6 +38,10 @@ public:
 	*/
 	void setViewPort(int x, int y, int w, int h, float part);
 
+	float* map_resource();
+	void unmap_resource();
+
+
 private:
 	mat4 projMatr;            // Матрица перспективного искажения
 	mat4 viewMatr;            // Матрица перехода к СК камеры
@@ -62,7 +68,11 @@ private:
 
 	// переменные для хранения идентификаторов VAO и VBO
 	GLuint meshVAO = 0, meshVBO = 0;
+	// Идентификатор буфера координат для CUDA
+	cudaGraphicsResource *cudaParticles;
 
-	cudaGraphicsResource *resource;
+	float* devPtr;
+	size_t size;
+
 
 };

@@ -31,7 +31,8 @@ void Scene::change_cam_dist(int count)
 
 void Scene::update_particles(float dt)
 {
-	this->p->update_particles(dt);
+	float *map = this->renderer->map_resource();
+	this->p->update_particles(map, dt);
 }
 
 void Scene::clear()

@@ -103,11 +103,17 @@ Renderer::Renderer(int w, int h, Particles *p, Camera *cam)
 
 	// создадим и используем Vertex Buffer Object (VBO)
 	glGenBuffers(1, &meshVBO);
-	glBindBuffer(GL_ARRAY_BUFFER, meshVBO);
+	glBindBuffer(ARR_TARGET, meshVBO);
 
 	// заполним VBO данными треугольника
-	glBufferData(GL_ARRAY_BUFFER, p->MESH_VERTEX_COUNT * VERTEX_SIZE,
-		p->triangleMesh, GL_STATIC_DRAW);
+	glBufferData(ARR_TARGET, p->MESH_VERTEX_COUNT * VERTEX_SIZE,
+		p->triangleMesh, GL_DYNAMIC_DRAW_ARB);
+
+	HANDLE_ERROR(cudaGraphicsGLRegisterBuffer(&cudaParticles,
+		meshVBO, cudaGraphicsMapFlagsNone));
+	HANDLE_ERROR(cudaGraphicsMapResources(1, &cudaParticles, NULL));
+	HANDLE_ERROR(cudaGraphicsResourceGetMappedPointer((void**)&devPtr, &size, cudaParticles));
+	HANDLE_ERROR(cudaGraphicsUnmapResources(1, &cudaParticles, NULL));
 
 	// получим позицию атрибута 'position' из шейдера
 	positionLocation = glGetAttribLocation(shaderProgram, "position");
@@ -132,7 +138,6 @@ Renderer::Renderer(int w, int h, Particles *p, Camera *cam)
 	}
 
 	OPENGL_CHECK_FOR_ERRORS();
-
 }
 
 Renderer::~Renderer()
@@ -154,8 +159,8 @@ void Renderer::render(Particles *particles, Camera *cam)
 	glUseProgram(shaderProgram);
 
 	// заполним VBO данными треугольника
-	glBufferData(GL_ARRAY_BUFFER, particles->MESH_VERTEX_COUNT * VERTEX_SIZE,
-		particles->triangleMesh, GL_STATIC_DRAW);
+	glBufferData(ARR_TARGET, particles->MESH_VERTEX_COUNT * VERTEX_SIZE,
+		particles->triangleMesh, GL_DYNAMIC_DRAW_ARB);
 
 	// рендер треугольника из VBO привязанного к VAO
 	glDrawArrays(GL_POINTS, 0, particles->MESH_VERTEX_COUNT);
@@ -166,7 +171,7 @@ void Renderer::render(Particles *particles, Camera *cam)
 void Renderer::clear()
 {
 	// удаляем VAO и VBO
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindBuffer(BUF_TARGET, 0);
 	glDeleteBuffers(1, &meshVBO);
 
 	glBindVertexArray(0);
@@ -190,6 +195,17 @@ void Renderer::setViewPort(int x, int y, int w, int h, float part)
 	viewPort.m[5] = h / 2.f / part;
 	viewPort.m[10] = 1000 / 2.f;
 	viewPort.m[15] = 0;
+}
+
+float * Renderer::map_resource()
+{
+
+	return devPtr;
+}
+
+void Renderer::unmap_resource()
+{
+
 }
 
 void Renderer::setviewmatr(Camera *cam)

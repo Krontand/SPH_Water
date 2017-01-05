@@ -6,6 +6,7 @@
 #include "common.h"
 #include "GLWindow.h"
 #include "Scene.h"
+#include "CUDA_core.cuh"
 
 #define WIDTH 1360
 #define HEIGHT 768
@@ -108,9 +109,8 @@ void GLWindowInput(const GLWindow *window)
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
 	int result;
-
 	LoggerCreate("SPH_Water_log.log");
-//	CUDA_init();
+	CUDA_init();
 	if (!GLWindowCreate("SPH Water (lol, water)", WIDTH, HEIGHT, false))
 		return 1;
 
