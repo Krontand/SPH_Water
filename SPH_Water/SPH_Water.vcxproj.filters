@@ -101,6 +101,9 @@
     <ClInclude Include="Particle_kernel.cuh">
       <Filter>Header Files\cuda</Filter>
     </ClInclude>
+    <ClInclude Include="vec3.cuh">
+      <Filter>Header Files\cuda</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SPH_Water.rc">

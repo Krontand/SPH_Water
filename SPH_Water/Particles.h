@@ -4,12 +4,8 @@
 #include "cuda_runtime.h"
 #include "math/mathgl.h"
 #include "Particle_kernel.cuh"
+#include "CUDA_core.cuh"
 
-typedef struct
-{
-	vec3 velocity;
-	vec3 position;
-} ParticleData;
 
 typedef std::vector<ParticleData> ParticleList;
 
@@ -29,6 +25,8 @@ public:
 	ParticleData data[MESH_VERTEX_COUNT];
 
 private:
+	ParticleData *dev_data;
+
 	int xcount;
 	int ycount;
 	int zcount;

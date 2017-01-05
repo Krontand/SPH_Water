@@ -35,6 +35,11 @@ Particles::Particles()
 			}
 		}
 	}
+	HANDLE_ERROR(cudaMalloc((void**)&dev_data, MESH_VERTEX_COUNT * 6 * sizeof(float)));
+	HANDLE_ERROR(cudaMemcpy(dev_data, 
+							data, 
+							MESH_VERTEX_COUNT * 6 * sizeof(float),
+							cudaMemcpyHostToDevice));
 }
 
 
@@ -49,7 +54,7 @@ void Particles::update_particles(float *particles, float dt)
 	const int threads = 512;
 	int blocks = (MESH_VERTEX_COUNT + 511) / 512;
 
-	calculateParticles(particles, dt, MESH_VERTEX_COUNT, blocks, threads);
+	calculateParticles(particles, this->dev_data, dt, MESH_VERTEX_COUNT, blocks, threads);
 }
 
 void Particles::doubleDensityRelaxation()

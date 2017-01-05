@@ -159,8 +159,8 @@ void Renderer::render(Particles *particles, Camera *cam)
 	glUseProgram(shaderProgram);
 
 	// заполним VBO данными треугольника
-	glBufferData(ARR_TARGET, particles->MESH_VERTEX_COUNT * VERTEX_SIZE,
-		particles->triangleMesh, GL_DYNAMIC_DRAW_ARB);
+//	glBufferData(ARR_TARGET, particles->MESH_VERTEX_COUNT * VERTEX_SIZE,
+//		particles->triangleMesh, GL_DYNAMIC_DRAW_ARB);
 
 	// рендер треугольника из VBO привязанного к VAO
 	glDrawArrays(GL_POINTS, 0, particles->MESH_VERTEX_COUNT);
@@ -199,13 +199,14 @@ void Renderer::setViewPort(int x, int y, int w, int h, float part)
 
 float * Renderer::map_resource()
 {
-
+//	HANDLE_ERROR(cudaGraphicsMapResources(1, &cudaParticles, NULL));
+//	HANDLE_ERROR(cudaGraphicsResourceGetMappedPointer((void**)&devPtr, &size, cudaParticles));
 	return devPtr;
 }
 
 void Renderer::unmap_resource()
 {
-
+//	HANDLE_ERROR(cudaGraphicsUnmapResources(1, &cudaParticles, NULL));
 }
 
 void Renderer::setviewmatr(Camera *cam)

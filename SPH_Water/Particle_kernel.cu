@@ -1,17 +1,20 @@
 #include "Particle_kernel.cuh"
-
-void calculateParticles(float * particles, float dt, int MESH_VERTEX_COUNT, int blocks, int threads)
+#include "Logger.h"
+void calculateParticles(float * particles, ParticleData *data, float dt, int MESH_VERTEX_COUNT, int blocks, int threads)
 {
-	calculateParticle <<< blocks, threads >>> (particles, dt);
+//	LOG_DEBUG("%d  %d\n", blocks, threads);
+	calculateParticle<<<blocks, threads>>> (particles, data, dt, MESH_VERTEX_COUNT);
 }
 
-__global__ void calculateParticle(float *particles, float dt)
+__global__ void calculateParticle(float *particles, ParticleData *data, float dt, int count)
 {
-/*	vec3 oldpos;
-	//this->hash->generate_hashtable(this->data);
-	for (int i = 0; i < MESH_VERTEX_COUNT; i++)
+	vec3 oldpos;
+	const vec3 g = vec3(0.0, -9.81, 0.0);
+	int i = threadIdx.x + blockIdx.x * blockDim.x;
+	if (i < count)
 	{
-		data[i].velocity = data[i].velocity + this->g * dt;
+		//this->hash->generate_hashtable(this->data);
+		data[i].velocity = data[i].velocity + g * dt;
 		oldpos = data[i].position;
 		data[i].position = data[i].position + data[i].velocity * dt;
 
@@ -21,11 +24,9 @@ __global__ void calculateParticle(float *particles, float dt)
 
 		if (data[i].position.y < -1.2)
 			data[i].velocity.y = fabs(data[i].velocity.y);
+
+		particles[6 * i + 0] = data[i].position.x;
+		particles[6 * i + 1] = data[i].position.y;
+		particles[6 * i + 2] = data[i].position.z;
 	}
-	for (int i = 0; i < MESH_VERTEX_COUNT; i++)
-	{
-		triangleMesh[6 * i + 0] = data[i].position.x;
-		triangleMesh[6 * i + 1] = data[i].position.y;
-		triangleMesh[6 * i + 2] = data[i].position.z;
-	}*/
 }

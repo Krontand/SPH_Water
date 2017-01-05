@@ -2,6 +2,7 @@
 #define GLWINDOW_H
 
 #include "common.h"
+#include "cuda_runtime.h"
 #include "OpenGL.h"
 
 #define INPUT_BUTTON_LEFT   0

@@ -361,7 +361,7 @@ int GLWindowMainLoop()
 			// надо вычитать из текущего значения таймера
 			deltaTime = GetTimerTicks() - beginFrameTime;
 
-			GLWindowUpdate(&g_window, deltaTime);
+			GLWindowUpdate(&g_window, 0.02);
 		}
 
 		Sleep(2);
