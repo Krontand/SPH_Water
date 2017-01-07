@@ -4,6 +4,7 @@
 #include "cuda_runtime.h"
 #include "math/mathgl.h"
 #include "Particle_kernel.cuh"
+#include "ParticleHashTable.cuh"
 #include "CUDA_core.cuh"
 
 
@@ -25,6 +26,7 @@ public:
 	ParticleData data[MESH_VERTEX_COUNT];
 
 private:
+	ParticleHashTable hash;
 	ParticleData *dev_data;
 
 	int xcount;

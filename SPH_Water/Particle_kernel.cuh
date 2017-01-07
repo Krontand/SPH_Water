@@ -1,16 +1,11 @@
 #pragma once
 
 #include "cuda_runtime.h"
+#include "ParticleHashTable.cuh"
 #include "vec3.cuh"
 
-typedef struct
-{
-	vec3 velocity;
-	vec3 position;
-} ParticleData;
+void calculateParticles(float *particles, ParticleHashTable hash, ParticleData *data,
+						float dt, int MESH_VERTEX_COUNT, int blocks, int threads);
 
-void calculateParticles(float *particles, ParticleData *data, 
-						float dt, int MESH_VERTEX_COUNT, 
-						int blocks, int threads);
-
-__global__ void calculateParticle(float *particles, ParticleData *data, float dt, int count);
+__global__ void calculateParticle(float *particles, ParticleData *data, 
+							      ParticleHashTable hash, float dt, int count);

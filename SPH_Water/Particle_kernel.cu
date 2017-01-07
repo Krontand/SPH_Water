@@ -1,12 +1,16 @@
 #include "Particle_kernel.cuh"
 #include "Logger.h"
-void calculateParticles(float * particles, ParticleData *data, float dt, int MESH_VERTEX_COUNT, int blocks, int threads)
+void calculateParticles(float *particles, ParticleHashTable hash, ParticleData *data, 
+						float dt, int MESH_VERTEX_COUNT, 
+						int blocks, int threads)
 {
 //	LOG_DEBUG("%d  %d\n", blocks, threads);
-	calculateParticle<<<blocks, threads>>> (particles, data, dt, MESH_VERTEX_COUNT);
+	clear_table<<<blocks, threads>>>(hash);
+	generate_hashtable<<<blocks, threads>>>(hash, data);
+	calculateParticle<<<blocks, threads>>>(particles, data, hash, dt, MESH_VERTEX_COUNT);
 }
 
-__global__ void calculateParticle(float *particles, ParticleData *data, float dt, int count)
+__global__ void calculateParticle(float *particles, ParticleData *data, ParticleHashTable hash, float dt, int count)
 {
 	vec3 oldpos;
 	const vec3 g = vec3(0.0, -9.81, 0.0);

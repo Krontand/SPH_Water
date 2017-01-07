@@ -92,9 +92,6 @@
     <ClInclude Include="Particles.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ParticleHashTable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="CUDA_core.cuh">
       <Filter>Header Files\cuda</Filter>
     </ClInclude>
@@ -102,6 +99,9 @@
       <Filter>Header Files\cuda</Filter>
     </ClInclude>
     <ClInclude Include="vec3.cuh">
+      <Filter>Header Files\cuda</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleHashTable.cuh">
       <Filter>Header Files\cuda</Filter>
     </ClInclude>
   </ItemGroup>
@@ -143,14 +143,11 @@
     <ClCompile Include="Scene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Particles.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticleHashTable.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleHashTable.cu">
+      <Filter>Source Files\cuda</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -159,6 +156,9 @@
     </CudaCompile>
     <CudaCompile Include="Particle_kernel.cu">
       <Filter>Source Files\cuda</Filter>
+    </CudaCompile>
+    <CudaCompile Include="Particles.cpp">
+      <Filter>Source Files</Filter>
     </CudaCompile>
   </ItemGroup>
 </Project>

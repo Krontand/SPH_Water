@@ -12,6 +12,8 @@ Particles::Particles()
 	zcount = 72;
 	scale = 1.6;
 
+	h = 1 / xcount;
+
 	ParticleData buf;
 	buf.velocity.set(0, 0, 0);
 
@@ -40,6 +42,8 @@ Particles::Particles()
 							data, 
 							MESH_VERTEX_COUNT * 6 * sizeof(float),
 							cudaMemcpyHostToDevice));
+
+	init_table(hash, 186629, h);
 }
 
 
@@ -54,7 +58,7 @@ void Particles::update_particles(float *particles, float dt)
 	const int threads = 512;
 	int blocks = (MESH_VERTEX_COUNT + 511) / 512;
 
-	calculateParticles(particles, this->dev_data, dt, MESH_VERTEX_COUNT, blocks, threads);
+	calculateParticles(particles, this->hash, this->dev_data, dt, MESH_VERTEX_COUNT, blocks, threads);
 }
 
 void Particles::doubleDensityRelaxation()
